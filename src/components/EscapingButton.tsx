@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 interface EscapingButtonProps {
@@ -9,6 +9,7 @@ interface EscapingButtonProps {
 const EscapingButton = ({ children }: EscapingButtonProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [escapeCount, setEscapeCount] = useState(0);
+  const [showBear, setShowBear] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -41,6 +42,10 @@ const EscapingButton = ({ children }: EscapingButtonProps) => {
 
     setPosition({ x: newX, y: newY });
     setEscapeCount((prev) => prev + 1);
+    
+    // Show crying bear
+    setShowBear(true);
+    setTimeout(() => setShowBear(false), 2000);
   }, []);
 
   return (
@@ -56,6 +61,43 @@ const EscapingButton = ({ children }: EscapingButtonProps) => {
           {messages[escapeCount % messages.length]}
         </motion.p>
       )}
+      
+      {/* Crying Bear */}
+      <AnimatePresence>
+        {showBear && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, x: -20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.5, x: -20 }}
+            className="absolute -left-20 top-1/2 -translate-y-1/2 text-4xl"
+          >
+            <motion.div
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 0.5, repeat: 3 }}
+              className="relative"
+            >
+              <span className="text-5xl">🧸</span>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ duration: 0.8, repeat: 2 }}
+                className="absolute -top-1 -right-1 text-xl"
+              >
+                💧
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ duration: 0.8, repeat: 2, delay: 0.3 }}
+                className="absolute top-0 left-0 text-lg"
+              >
+                💧
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div
         animate={{ x: position.x, y: position.y }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
