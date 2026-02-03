@@ -6,9 +6,16 @@ import FloatingHearts from "@/components/FloatingHearts";
 import EscapingButton from "@/components/EscapingButton";
 import Celebration from "@/components/Celebration";
 import romanticRoses from "@/assets/romantic-roses.jpg";
+import cryingBear from "@/assets/crying-bear.png";
 
 const Index = () => {
   const [hasAccepted, setHasAccepted] = useState(false);
+  const [showBear, setShowBear] = useState(false);
+
+  const handleNoEscape = () => {
+    setShowBear(true);
+    setTimeout(() => setShowBear(false), 2500);
+  };
 
   return (
     <div className="min-h-screen bg-romantic relative overflow-hidden">
@@ -62,12 +69,12 @@ const Index = () => {
                 </motion.div>
               </motion.div>
 
-              {/* Main question */}
+              {/* Main question with crying bear */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="space-y-4"
+                className="space-y-4 relative"
               >
                 <motion.div
                   animate={{ scale: [1, 1.05, 1] }}
@@ -77,9 +84,35 @@ const Index = () => {
                   <Heart className="w-12 h-12 text-rose fill-rose mx-auto animate-heart-beat" strokeWidth={0} />
                 </motion.div>
 
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-gradient-rose leading-tight">
-                  Will You Be My Valentine?
-                </h1>
+                <div className="relative inline-block">
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-gradient-rose leading-tight">
+                    Will You Be My Valentine?
+                  </h1>
+                  
+                  {/* Crying Bear - positioned next to the title */}
+                  <AnimatePresence>
+                    {showBear && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.3, x: 30, rotate: 10 }}
+                        animate={{ opacity: 1, scale: 1, x: 0, rotate: 0 }}
+                        exit={{ opacity: 0, scale: 0.3, x: 30 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        className="absolute -right-8 md:-right-40 top-1/2 -translate-y-1/2"
+                      >
+                        <motion.div
+                          animate={{ y: [0, -10, 0] }}
+                          transition={{ duration: 0.6, repeat: 3 }}
+                        >
+                          <img 
+                            src={cryingBear} 
+                            alt="Crying bear" 
+                            className="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-xl"
+                          />
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
                 <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-md mx-auto">
                   I can't imagine spending this special day with anyone else...
@@ -104,7 +137,7 @@ const Index = () => {
                   Yes! 💕
                 </Button>
 
-                <EscapingButton>
+                <EscapingButton onEscape={handleNoEscape}>
                   No 😢
                 </EscapingButton>
               </motion.div>

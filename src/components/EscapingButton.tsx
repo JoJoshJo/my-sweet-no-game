@@ -1,16 +1,15 @@
 import { useState, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import cryingBear from "@/assets/crying-bear.png";
 
 interface EscapingButtonProps {
   children: React.ReactNode;
+  onEscape?: () => void;
 }
 
-const EscapingButton = ({ children }: EscapingButtonProps) => {
+const EscapingButton = ({ children, onEscape }: EscapingButtonProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [escapeCount, setEscapeCount] = useState(0);
-  const [showBear, setShowBear] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,10 +43,9 @@ const EscapingButton = ({ children }: EscapingButtonProps) => {
     setPosition({ x: newX, y: newY });
     setEscapeCount((prev) => prev + 1);
     
-    // Show crying bear
-    setShowBear(true);
-    setTimeout(() => setShowBear(false), 2500);
-  }, []);
+    // Trigger parent callback
+    onEscape?.();
+  }, [onEscape]);
 
   return (
     <div ref={containerRef} className="relative inline-block min-w-[200px] min-h-[100px]">
@@ -62,48 +60,6 @@ const EscapingButton = ({ children }: EscapingButtonProps) => {
           {messages[escapeCount % messages.length]}
         </motion.p>
       )}
-      
-      {/* Crying Bear */}
-      <AnimatePresence>
-        {showBear && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.3, x: -30, rotate: -10 }}
-            animate={{ opacity: 1, scale: 1, x: 0, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.3, x: -30 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="absolute -left-32 top-1/2 -translate-y-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 0.6, repeat: 3 }}
-              className="relative"
-            >
-              <img 
-                src={cryingBear} 
-                alt="Crying bear" 
-                className="w-28 h-28 object-contain drop-shadow-lg"
-              />
-              {/* Animated tears */}
-              <motion.div
-                initial={{ opacity: 0, y: 0 }}
-                animate={{ opacity: [0, 1, 0], y: [0, 20, 40] }}
-                transition={{ duration: 1, repeat: 2, delay: 0.2 }}
-                className="absolute top-8 left-4 text-2xl"
-              >
-                💧
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 0 }}
-                animate={{ opacity: [0, 1, 0], y: [0, 20, 40] }}
-                transition={{ duration: 1, repeat: 2, delay: 0.5 }}
-                className="absolute top-8 right-4 text-2xl"
-              >
-                💧
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <motion.div
         animate={{ x: position.x, y: position.y }}
