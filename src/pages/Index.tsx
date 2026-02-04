@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import FloatingHearts from "@/components/FloatingHearts";
 import EscapingButton from "@/components/EscapingButton";
 import Celebration from "@/components/Celebration";
-import CryingBearVector from "@/components/CryingBearVector";
 import romanticRoses from "@/assets/romantic-roses.jpg";
+import cryingBear from "@/assets/crying-bear.png";
 
 const Index = () => {
   const [hasAccepted, setHasAccepted] = useState(false);
@@ -102,8 +102,15 @@ const Index = () => {
                         <motion.div
                           animate={{ y: [0, -10, 0] }}
                           transition={{ duration: 0.6, repeat: 3 }}
+                          className="relative"
                         >
-                          <CryingBearVector className="w-40 h-40 md:w-56 md:h-56" />
+                          {/* Soft background glow for blending */}
+                          <div className="absolute inset-0 bg-rose-light/50 rounded-full blur-2xl scale-90" />
+                          <img 
+                            src={cryingBear} 
+                            alt="Crying bear" 
+                            className="relative w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-lg"
+                          />
                         </motion.div>
                       </motion.div>
                     )}
