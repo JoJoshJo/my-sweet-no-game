@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
@@ -11,7 +11,7 @@ const EscapingButton = ({ children, onEscape }: EscapingButtonProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [escapeCount, setEscapeCount] = useState(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
   const messages = [
     "Nice try! 😏",
@@ -24,38 +24,52 @@ const EscapingButton = ({ children, onEscape }: EscapingButtonProps) => {
     "Keep trying... or just click Yes! 💝",
   ];
 
+  useEffect(() => {
+    const updateSize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
   const escape = useCallback(() => {
-    if (!buttonRef.current || !containerRef.current) return;
+    if (!buttonRef.current) return;
 
     const button = buttonRef.current.getBoundingClientRect();
-    const container = containerRef.current.getBoundingClientRect();
+    const padding = 20;
 
-    const maxX = container.width - button.width - 20;
-    const maxY = container.height - button.height - 20;
+    // Calculate max bounds based on window size
+    const maxX = windowSize.width - button.width - padding;
+    const maxY = windowSize.height - button.height - padding;
 
-    let newX = Math.random() * maxX - maxX / 2;
-    let newY = Math.random() * maxY - maxY / 2;
+    // Generate random position anywhere on the screen
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
 
-    // Make sure it doesn't go too far
-    newX = Math.max(-150, Math.min(150, newX));
-    newY = Math.max(-100, Math.min(100, newY));
+    // Convert to offset from current position
+    const currentCenterX = button.left + button.width / 2;
+    const currentCenterY = button.top + button.height / 2;
+
+    const newX = randomX - currentCenterX + button.width / 2 + position.x;
+    const newY = randomY - currentCenterY + button.height / 2 + position.y;
 
     setPosition({ x: newX, y: newY });
     setEscapeCount((prev) => prev + 1);
-    
+
     // Trigger parent callback
     onEscape?.();
-  }, [onEscape]);
+  }, [onEscape, windowSize, position]);
 
   return (
-    <div ref={containerRef} className="relative inline-block min-w-[200px] min-h-[100px]">
+    <div className="relative inline-block">
       {escapeCount > 0 && (
         <motion.p
           key={escapeCount}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-muted-foreground font-medium"
+          className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-muted-foreground font-medium z-50"
         >
           {messages[escapeCount % messages.length]}
         </motion.p>
@@ -63,7 +77,8 @@ const EscapingButton = ({ children, onEscape }: EscapingButtonProps) => {
 
       <motion.div
         animate={{ x: position.x, y: position.y }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        className="relative z-40"
       >
         <Button
           ref={buttonRef}
