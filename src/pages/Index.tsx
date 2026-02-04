@@ -93,11 +93,11 @@ const Index = () => {
                   <AnimatePresence>
                     {showBear && (
                       <motion.div
-                        initial={{ opacity: 0, scale: 0.3, x: 30, rotate: 10 }}
+                        initial={{ opacity: 0, scale: 0.3, x: 20, rotate: 10 }}
                         animate={{ opacity: 1, scale: 1, x: 0, rotate: 0 }}
-                        exit={{ opacity: 0, scale: 0.3, x: 30 }}
+                        exit={{ opacity: 0, scale: 0.3, x: 20 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className="absolute -right-8 md:-right-40 top-1/2 -translate-y-1/2"
+                        className="absolute -right-4 md:-right-28 top-1/2 -translate-y-1/2"
                       >
                         <motion.div
                           animate={{ y: [0, -10, 0] }}
@@ -106,7 +106,7 @@ const Index = () => {
                           <img 
                             src={cryingBear} 
                             alt="Crying bear" 
-                            className="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-xl"
+                            className="w-40 h-40 md:w-56 md:h-56 object-contain drop-shadow-lg"
                           />
                         </motion.div>
                       </motion.div>
