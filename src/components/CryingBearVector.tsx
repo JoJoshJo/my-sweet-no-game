@@ -24,6 +24,13 @@ export default function CryingBearVector({
       <title>{title}</title>
 
       <defs>
+        {/* Soft circular background gradient matching the page */}
+        <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="hsl(var(--rose-light))" stopOpacity="0.6" />
+          <stop offset="60%" stopColor="hsl(var(--rose-light))" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="hsl(var(--rose-light))" stopOpacity="0" />
+        </radialGradient>
+
         <radialGradient id="bearFace" cx="50%" cy="35%" r="75%">
           <stop offset="0%" stopColor="hsl(var(--cream))" />
           <stop offset="65%" stopColor="hsl(var(--secondary))" />
@@ -31,23 +38,23 @@ export default function CryingBearVector({
         </radialGradient>
 
         <linearGradient id="tear" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="hsl(var(--gold-light))" />
-          <stop offset="50%" stopColor="hsl(var(--accent) / 0.35)" />
-          <stop offset="100%" stopColor="hsl(var(--accent) / 0.15)" />
+          <stop offset="0%" stopColor="hsl(200 70% 70%)" />
+          <stop offset="50%" stopColor="hsl(200 60% 75% / 0.6)" />
+          <stop offset="100%" stopColor="hsl(200 50% 80% / 0.3)" />
         </linearGradient>
 
         <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur" />
+          <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur" />
           <feColorMatrix
             in="blur"
             type="matrix"
-            values="0 0 0 0 0
-                    0 0 0 0 0
-                    0 0 0 0 0
-                    0 0 0 0.25 0"
+            values="0 0 0 0 0.85
+                    0 0 0 0 0.65
+                    0 0 0 0 0.7
+                    0 0 0 0.35 0"
             result="shadow"
           />
-          <feOffset in="shadow" dx="0" dy="8" result="offsetShadow" />
+          <feOffset in="shadow" dx="0" dy="10" result="offsetShadow" />
           <feMerge>
             <feMergeNode in="offsetShadow" />
             <feMergeNode in="SourceGraphic" />
@@ -55,7 +62,8 @@ export default function CryingBearVector({
         </filter>
       </defs>
 
-      {/* No background rectangle on purpose */}
+      {/* Soft circular background glow to integrate with page */}
+      <circle cx="160" cy="160" r="155" fill="url(#bgGlow)" />
       <g filter="url(#softShadow)">
         {/* Ears */}
         <circle cx="86" cy="92" r="44" fill="hsl(var(--secondary))" />
