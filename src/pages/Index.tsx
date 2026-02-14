@@ -87,13 +87,15 @@ const Index = () => {
                 <div className="relative inline-block">
                   <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-gradient-rose leading-tight">
                     Hey{" "}
-                    <motion.span
-                      className="inline-block italic"
-                      animate={{ rotate: [0, -3, 3, 0], scale: [1, 1.08, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                    <span
+                      className="inline-block italic relative"
+                      style={{
+                        textShadow: '0 0 20px hsl(var(--rose) / 0.5), 0 0 40px hsl(var(--rose) / 0.3)',
+                      }}
                     >
                       Grace
-                    </motion.span>
+                      <span className="absolute bottom-0 left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-transparent via-rose to-transparent opacity-80" />
+                    </span>
                     ,<br />Will You Be My Valentine?
                   </h1>
                   
@@ -126,7 +128,7 @@ const Index = () => {
                 </div>
 
                 <p className="text-lg md:text-xl text-muted-foreground font-medium max-w-md mx-auto">
-                  I can't imagine spending this special day with anyone else...
+                  There's something about you that just makes everything better
                   <span className="text-rose"> 💕</span>
                 </p>
               </motion.div>
