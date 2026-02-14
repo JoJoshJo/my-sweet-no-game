@@ -19,6 +19,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-romantic relative overflow-hidden">
+      {/* Pink/red gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-rose-light/40 via-transparent to-rose/20 pointer-events-none z-0" />
+
       {/* Background floating hearts */}
       <FloatingHearts />
 
@@ -85,17 +88,21 @@ const Index = () => {
                 </motion.div>
 
                 <div className="relative inline-block">
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-gradient-rose leading-tight">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-gradient-rose leading-tight">
                     Hey{" "}
-                    <span
-                      className="inline-block italic relative"
+                    <motion.span
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                      className="inline-block italic font-display"
                       style={{
-                        textShadow: '0 0 20px hsl(var(--rose) / 0.5), 0 0 40px hsl(var(--rose) / 0.3)',
+                        fontSize: 'clamp(2.5rem, 5vw + 1rem, 5rem)',
+                        textShadow: '0px 2px 10px rgba(255, 105, 180, 0.3), 0 0 30px hsl(var(--rose) / 0.4)',
                       }}
                     >
                       Grace
                       <span className="absolute bottom-0 left-0 w-full h-[3px] rounded-full bg-gradient-to-r from-transparent via-rose to-transparent opacity-80" />
-                    </span>
+                    </motion.span>
                     ,<br />Will You Be My Valentine?
                   </h1>
                   
