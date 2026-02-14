@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,14 +7,45 @@ import EscapingButton from "@/components/EscapingButton";
 import Celebration from "@/components/Celebration";
 import romanticRoses from "@/assets/romantic-roses.jpg";
 import cryingBear from "@/assets/crying-bear.png";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
   const [hasAccepted, setHasAccepted] = useState(false);
   const [showBear, setShowBear] = useState(false);
+  const noCountRef = useRef(0);
 
   const handleNoEscape = () => {
+    noCountRef.current += 1;
     setShowBear(true);
     setTimeout(() => setShowBear(false), 2500);
+  };
+
+  const handleYes = async () => {
+    setHasAccepted(true);
+
+    try {
+      // Get IP and location
+      let ip = 'Unknown';
+      let location = 'Unknown';
+      try {
+        const ipRes = await fetch('https://ipapi.co/json/');
+        const ipData = await ipRes.json();
+        ip = ipData.ip || 'Unknown';
+        location = `${ipData.city || ''}, ${ipData.region || ''}, ${ipData.country_name || ''}`.replace(/^, |, $/g, '') || 'Unknown';
+      } catch (e) {
+        console.error('Could not fetch IP info:', e);
+      }
+
+      await supabase.functions.invoke('send-valentine-email', {
+        body: {
+          noCount: noCountRef.current,
+          ip,
+          location,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to send email:', error);
+    }
   };
 
   return (
@@ -150,7 +181,7 @@ const Index = () => {
                 <Button
                   variant="yes"
                   size="lg"
-                  onClick={() => setHasAccepted(true)}
+                  onClick={handleYes}
                   className="min-w-[160px]"
                 >
                   <Heart className="w-5 h-5 fill-current" />
