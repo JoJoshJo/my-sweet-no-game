@@ -86,7 +86,15 @@ const Index = () => {
 
                 <div className="relative inline-block">
                   <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-gradient-rose leading-tight">
-                    Will You Be My Valentine?
+                    Hey{" "}
+                    <motion.span
+                      className="inline-block italic"
+                      animate={{ rotate: [0, -3, 3, 0], scale: [1, 1.08, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                    >
+                      Grace
+                    </motion.span>
+                    ,<br />Will You Be My Valentine?
                   </h1>
                   
                   {/* Crying Bear - positioned next to the title */}
