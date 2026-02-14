@@ -147,16 +147,6 @@ const Celebration = () => {
         ))}
       </motion.div>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="text-lg text-muted-foreground mt-8"
-      >
-        <Sparkles className="inline w-5 h-5 text-gold mr-2" />
-        Get ready for the most romantic Valentine's Day ever!
-        <Sparkles className="inline w-5 h-5 text-gold ml-2" />
-      </motion.p>
     </motion.div>
   );
 };
